@@ -25,7 +25,7 @@ class Header extends Component {
     let travelerContent = null;
     let ownerListPropertyTab = null;
 
-    if (cookie.load("Accounttype") >= 2) {
+    if (cookie.load("Accounttype") === 2) {
       ownerContent = (
         <a className="dropdown-item blue-text" href="/owner-dashboard">
           Owner Dashboard
@@ -92,14 +92,16 @@ class Header extends Component {
         <div className="header-bar">
           <a href="/home">
             <img
-              src={require("../../Static/Images/test2.svg")}
+              src={require("../../Static/Images/grubhub.jpg")}
+              style={{ width: 200, height: 200 }}
               alt="logo-homeaway"
             />
           </a>
           {loggedInUserContent}
           <a href="/home">
             <img
-              src={require("../../Static/Images/test1.svg")}
+              src={require("../../Static/Images/fd.jpg")}
+              style={{ width: 200, height: 200 }}
               alt="logo"
               className="flt-right"
             />
