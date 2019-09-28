@@ -513,6 +513,179 @@ app.post("/item-details", function(req, res) {
   }
 });
 
+app.get("/profile-details", function(req, res) {
+  console.log("Inside profile GET");
+  console.log("Request Body:", req.body);
+  const userSession = req.session.user;
+  console.log(userSession);
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in establishing connection");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Error in establishing connection");
+      } else {
+        console.log("Established connection");
+        if (req.session.user.Accounttype === 1)
+          var sql =
+            "SELECT * from buyer where email=" +
+            mysql.escape(res.session.user.email);
+        else
+          var sql =
+            "SELECT * from owner where owner_id=" +
+            mysql.escape(userSession.owner_id);
+        //console.log("Profile Details:", req.session.user);
+        conn.query(sql, function(err, result) {
+          if (err) {
+            console.log("Error in retrieving Profile Details");
+            res.writeHead(400, {
+              "Content-type": "text/plain"
+            });
+            res.end("Error in retrieving Profile Details");
+          } else {
+            console.log("Profile Data loaded successfully");
+            console.log(result);
+            res.writeHead(200, {
+              "Content-type": "application/json"
+            });
+            res.end(JSON.stringify(result[0]));
+            console.log(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  }
+});
+
+app.post("/property-details", function(req, res) {
+  console.log("Inside Property Details Method POST!");
+  console.log("Request Body: ", req.body);
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in creating connection!");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Error in creating connection!");
+      } else {
+        var sql = "SELECT * from item WHERE item_id = " + req.body.item_id;
+        conn.query(sql, function(err, result) {
+          if (err) {
+            console.log("Error in Retrieving property");
+            res.writeHead(400, {
+              "Content-type": "text/plain"
+            });
+            res.end("Error in Retrieving property");
+          } else {
+            res.writeHead(200, {
+              "Content-type": "application/json"
+            });
+            console.log(JSON.stringify(result[0]));
+            res.end(JSON.stringify(result[0]));
+            conn.release();
+          }
+        });
+      }
+    });
+  }
+});
+
+app.get("/update-item", function(req, res) {
+  console.log("Inside update-item GET!");
+  //console.log(req.body);
+  //const userSession = req.session.user;
+
+  //if (req.session.user) {
+  pool.getConnection(function(err, conn) {
+    if (err) {
+      console.log("Error in establishing connection");
+      res.writeHead(400, {
+        "Content-type": "text/plain"
+      });
+      res.end("Error in establishing connection");
+    } else {
+      console.log("Established connection");
+      const id = 825;
+      var sql = "SELECT * from item where item_id=" + mysql.escape(id);
+
+      conn.query(sql, function(err, result) {
+        if (err) {
+          console.log("Error in getting item details");
+          res.writeHead(400, {
+            "Content-type": "text/plain"
+          });
+          res.end("Error in getting item details");
+        } else {
+          console.log("Data loaded successfully");
+          console.log(result);
+
+          res.writeHead(200, {
+            "Content-type": "application/json"
+          });
+          res.end(JSON.stringify(result[0]));
+          console.log(JSON.stringify(result));
+        }
+      });
+    }
+  });
+  // }
+});
+
+app.post("/update-item", function(req, res) {
+  console.log("Inside UPDATE ITEM POST");
+  console.log("Request Body:", req.body);
+  const userSession = req.session.user;
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in creating connection");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Erro in creating connection!");
+      } else {
+        var sql =
+          "UPDATE item set" +
+          "item_name=" +
+          mysql.escape(req.body.item_name) +
+          "," +
+          "description=" +
+          mysql.escape(req.body.description) +
+          "," +
+          "price=" +
+          mysql.escape(req.body.price) +
+          "," +
+          "section=" +
+          mysql.escape(req.body.section) +
+          "WHERE item_id=" +
+          mysql.escape(825);
+
+        conn.query(sql, function(err, result) {
+          if (err) {
+            console.log("Error in updating items");
+            res.writeHead(400, {
+              "Content-type": "teext/plain"
+            });
+            res.end("Error in updating items");
+          } else {
+            console.log("Update Success");
+            result.writeHead(200, {
+              "Content-type": "application.json"
+            });
+            res.end("Updated!");
+          }
+        });
+      }
+    });
+  }
+});
+
 module.exports = app;
 app.listen(3001);
 app.get("/", (req, res) => res.send("Hello World!"));
