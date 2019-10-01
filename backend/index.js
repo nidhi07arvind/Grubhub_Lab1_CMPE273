@@ -1,4 +1,5 @@
 var express = require("express");
+
 const path = require("path");
 var pool = require("./ConnectionPooling.js");
 
@@ -422,29 +423,27 @@ app.get("/owner-dashboard-details", function(req, res) {
           const res_id = result[0].res_id;
           console.log(res_id);
           console.log("Got restaurant id successful!");
-          res.writeHead(200, {
-            "Content-type": "text/plain"
-          });
-          res.end("Got restaurant ID successful!");
 
           //const item_id = Math.floor(Math.random() * 1000);
-          var sql = "SELECT * from item where res_id = " + res_id;
+          var sql = "SELECT * from item where res_id = " + mysql.escape(res_id);
 
           conn.query(sql, function(err, result) {
             if (err) {
-              res.writeHead(400, {
-                "Content-type": "text/plain"
-              });
+              // res.writeHead(400, {
+              //   "Content-type": "text/plain"
+              // });
               console.log("Error in getting  items");
-              res.end("Error in getting items");
+              res.json({ data: "Error in getting items" });
             } else {
               console.log("Items in Dashboard loaded successfully");
               console.log(result);
-              res.writeHead(200, {
-                "Content-type": "application/json"
-              });
+              // res.writeHead(200, {
+              //   "Content-type": "application/json"
+              // });
               console.log(JSON.stringify(result));
-              res.end(JSON.stringify(result));
+              //res.end({ data: result });
+
+              res.send(200, JSON.stringify(result));
             }
           });
         }
@@ -648,7 +647,7 @@ app.post("/update-item", function(req, res) {
         res.writeHead(400, {
           "Content-type": "text/plain"
         });
-        res.end("Erro in creating connection!");
+        res.end("Error in creating connection!");
       } else {
         var sql =
           "UPDATE item set" +
@@ -679,6 +678,81 @@ app.post("/update-item", function(req, res) {
               "Content-type": "application.json"
             });
             res.end("Updated!");
+          }
+        });
+      }
+    });
+  }
+});
+
+app.post("/search", function(req, res) {
+  console.log("Inside SEARCH POST!");
+  console.log("Request Body:", req.body);
+
+  const userSession = req.session.user;
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in establishing connection!");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Error in establishing connection!");
+      } else {
+        console.log("Connection established successfully");
+        console.log("Request search text:", req.body.searchText);
+        const iname = req.body.searchText;
+        //var sql = "SELECT * from item where item_name LIKE ?";
+
+        conn.query(
+          "SELECT * from item where item_name LIKE?",
+          "%" + iname + "%",
+          function(err, result) {
+            if (err) {
+              console.log("Error in searching items!");
+              res.json({ data: "Error in gettings items" });
+            } else {
+              console.log("Items loaded successfully");
+              console.log(result);
+              console.log(JSON.stringify(result));
+              res.status(200).send(JSON.stringify(result));
+            }
+          }
+        );
+      }
+    });
+  }
+});
+
+app.post("/restaurant-display", function(req, res) {
+  console.log("Inside Restaurant Details POST!");
+  console.log(req.body);
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in establishing connection");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Error in establishing connection");
+      } else {
+        console.log("Connection Established");
+        console.log("Request body:", req.body.res_id);
+        const cuisine = "italian";
+        //var sql = "SELECT * from item where cuisine =" + mysql.escape(cuisine);
+        var sql =
+          "SELECT * from item where res_id =" + mysql.escape(req.body.res_id);
+        conn.query(sql, function(err, result) {
+          if (err) {
+            console.log("Error in searching items!");
+            res.json({ data: "Error in gettings items" });
+          } else {
+            console.log("Items loaded successfully");
+            console.log(result);
+            console.log(JSON.stringify(result));
+            res.status(200).send(JSON.stringify(result));
           }
         });
       }
