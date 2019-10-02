@@ -51,7 +51,7 @@ class Login extends Component {
       Profile: this.state.Profile
     };
 
-    if (this.state.Email == "" || this.state.Password == "") {
+    if (this.state.Email === "" || this.state.Password === "") {
       this.setState({
         formValidationFailure: true
       });
@@ -76,7 +76,7 @@ class Login extends Component {
               this.setState({
                 isValidationFailure: false
               });
-              console.log("Error messagw", err.response.status);
+              console.log("Error message", err.response.status);
             } else {
               this.setState({
                 errorRedirect: true
@@ -93,9 +93,9 @@ class Login extends Component {
       redrirectVar = <Redirect to="/home" />;
     }
 
-    //if (this.state.errorRedirect) {
-    //redrirectVar = <Redirect to="/error" />;
-    //}
+    // if (this.state.errorRedirect) {
+    //   redrirectVar = <Redirect to="/error" />;
+    // }
 
     let errorPanel = null;
     if (!this.state.isValidationFailure) {
@@ -109,7 +109,7 @@ class Login extends Component {
       );
     }
     let formErrorPanel = null;
-    console.log("FormvalidationFailur", this.state.formValidationFailure);
+    console.log("FormvalidationFailure", this.state.formValidationFailure);
     if (this.state.formValidationFailure) {
       formErrorPanel = (
         <div>
@@ -208,7 +208,7 @@ class Login extends Component {
                     <span>
                       <img
                         className="google-logo flt-left"
-                        src={require("../../Static/Images/test2.svg")}
+                        src={require("../../Static/Images/google.jpg")}
                         alt="google-logo"
                       ></img>
                     </span>
