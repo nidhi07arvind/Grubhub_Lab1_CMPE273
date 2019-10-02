@@ -70,10 +70,10 @@ class OwnerSignup extends Component {
     };
 
     if (
-      this.state.FirstName == "" ||
-      this.state.Email == "" ||
-      this.state.Password == "" ||
-      this.state.RestaurantName == ""
+      this.state.FirstName === "" ||
+      this.state.Email === "" ||
+      this.state.Password === "" ||
+      this.state.RestaurantName === ""
     ) {
       this.setState({
         validationError: true
@@ -135,7 +135,7 @@ class OwnerSignup extends Component {
           <div className="container content">
             <div className="login-container">
               <div>
-                <p>Sign up for HomeAway</p>
+                <p>Sign up for GrubHub</p>
                 <p>
                   Already have an account? <a href="/login">Login</a>
                 </p>
@@ -222,7 +222,7 @@ class OwnerSignup extends Component {
                     <span>
                       <img
                         className="google-logo flt-left"
-                        src={require("../../Static/Images/test2.svg")}
+                        src={require("../../Static/Images/google.jpg")}
                         alt="google-logo"
                       ></img>
                     </span>
