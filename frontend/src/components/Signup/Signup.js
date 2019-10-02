@@ -43,9 +43,9 @@ class Signup extends Component {
 
   signup = e => {
     if (
-      this.state.FirstName == "" ||
-      this.state.Email == "" ||
-      this.state.Password == ""
+      this.state.FirstName === "" ||
+      this.state.Email === "" ||
+      this.state.Password === ""
     ) {
       this.setState({
         validationError: true
@@ -105,7 +105,7 @@ class Signup extends Component {
           <div className="container content">
             <div className="login-container">
               <div>
-                <p>Sign up for HomeAway</p>
+                <p>Sign up for GrubHub</p>
                 <p>
                   Already have an account? <a href="/login">Login</a>
                 </p>
@@ -170,7 +170,7 @@ class Signup extends Component {
                     <span>
                       <img
                         className="google-logo flt-left"
-                        src={require("../../Static/Images/test1.svg")}
+                        src={require("../../Static/Images/google.jpg")}
                         alt="google-logo"
                       ></img>
                     </span>
