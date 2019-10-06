@@ -136,4 +136,61 @@ app.get("/owner-dashboard-details", function(req, res) {
   });
 });
 
+app.post("/delete-item", function(req, res) {
+  console.log("Inside addtocart POST");
+  console.log("Request Body: ", req.body);
+  //console.log("Request Body: ", req.body.item_id);
+  const userSession = req.session.user;
+
+  if (req.session.user) {
+    pool.getConnection(function(err, conn) {
+      if (err) {
+        console.log("Error in establishing connection!");
+        res.writeHead(400, {
+          "Content-type": "text/plain"
+        });
+        res.end("Error in establishing connection!");
+      } else {
+        // const order_id = Math.floor(Math.random() * 10000);
+        // const quantity = 1;
+        // const item_id = req.body.item_id;
+        // // console.log("Item_ID: ", item_id);
+        var sql =
+          "DELETE from item WHERE (item_id) = " +
+          mysql.escape(req.body.item_id);
+        // var sql =
+        //   "INSERT into cart (item_id,res_id,email,item_name,quantity,price) VALUES(" +
+        //   mysql.escape(req.body.item_id) +
+        //   "," +
+        //   mysql.escape(req.body.res_id) +
+        //   "," +
+        //   mysql.escape(req.session.user.email) +
+        //   "," +
+        //   mysql.escape(req.body.item_name) +
+        //   "," +
+        //   mysql.escape(quantity) +
+        //   "," +
+        //   mysql.escape(req.body.price) +
+        //   ");";
+
+        conn.query(sql, function(err, result) {
+          if (err) {
+            console.log("Error in deleting item to cart");
+            res.writeHead(400, {
+              "Content-type": "text/plain"
+            });
+            res.end("Error in deleting item to cart");
+          } else {
+            console.log("Deleted item successful!");
+            res.writeHead(200, {
+              "Content-type": "text/plain"
+            });
+            res.end("Deleted item successful!");
+          }
+        });
+      }
+    });
+  }
+});
+
 module.exports = app;
