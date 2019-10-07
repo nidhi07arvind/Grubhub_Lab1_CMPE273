@@ -6,48 +6,37 @@ import Home from "./Home/Home";
 import Signup from "./Signup/Signup";
 import OwnerSignup from "./Signup/OwnerSignup";
 import AddRestaurant from "./ListRestaurant/AddRestaurant";
-import DisplayProperties from "./DisplayProperties/DisplayProperties";
+import DisplayItems from "./DisplayItems/DisplayItems";
+import RestaurantDisplay from "./DisplayItems/RestaurantDisplay";
+import CuisineDisplay from "./DisplayItems/CuisineDisplay";
 import AddItems from "./Items/AddItems";
 import UpdateItems from "./Items/UpdateItems";
-//import PropertyDisplay from "./DisplayProperties/PropertyDisplay";
 import Profile from "./Profile/Profile";
-import MyOrders from "./MyOrders/MyOrders";
+import OwnerOrders from "./MyOrders/OwnerOrders";
+import Cart from "./MyOrders/Cart";
 import OwnerDashboard from "./OwnerDashboard/OwnerDashboard";
+import Breakfast from "./OwnerDashboard/Breakfast";
+import Lunch from "./OwnerDashboard/Lunch";
+import Dinner from "./OwnerDashboard/Dinner";
 import Error from "./Error/Error";
-import moment from "moment";
+import BuyerOrder from "./MyOrders/BuyerOrder";
+import PastOrders from "./MyOrders/PastOrders";
 
 class Main extends Component {
-  /*constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       isSearch: false,
-      searchStartDate: moment(),
-      searchEndDate: moment(),
-      searchText: "",
-      guests: 2
+      searchText: ""
     };
 
     this.handlesearchClick = this.handlesearchClick.bind(this);
-    this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleEndDateChange = this.handleEndDateChange.bind(this);
   }
 
   handlesearchClick = () => {
     this.setState({
       isSearch: true
-    });
-  };
-
-  handleStartDateChange = date => {
-    this.setState({
-      searchStartDate: date
-    });
-  };
-
-  handleEndDateChange = date => {
-    this.setState({
-      searchEndDate: date
     });
   };
 
@@ -59,25 +48,21 @@ class Main extends Component {
     this.setState({
       [name]: value
     });
-  };*/
+  };
 
   render() {
     return (
       <div>
-        {/** Render Different Components based on ROute*/}
+        {/** Render Different Components based on Route*/}
         <Route
           exact
           render={() => {
             return (
               <Home
-              /*handleInputChange={this.handleInputChange}
+                handleInputChange={this.handleInputChange}
                 searchText={this.state.searchText}
-                handleEndDateChange={this.handleEndDateChange}
-                endDate={this.state.searchEndDate}
-                handleStartDateChange={this.handleStartDateChange}
-                startDate={this.state.searchStartDate}
                 isSearch={this.state.isSearch}
-                searchClick={this.handlesearchClick}*/
+                searchClick={this.handlesearchClick}
               />
             );
           }}
@@ -87,14 +72,10 @@ class Main extends Component {
           render={() => {
             return (
               <Home
-              /*handleInputChange={this.handleInputChange}
+                handleInputChange={this.handleInputChange}
                 searchText={this.state.searchText}
-                handleEndDateChange={this.handleEndDateChange}
-                endDate={this.state.searchEndDate}
-                handleStartDateChange={this.handleStartDateChange}
-                startDate={this.state.searchStartDate}
                 isSearch={this.state.isSearch}
-                searchClick={this.handlesearchClick}*/
+                searchClick={this.handlesearchClick}
               />
             );
           }}
@@ -107,28 +88,31 @@ class Main extends Component {
         <Route
           render={() => {
             return (
-              <DisplayProperties
+              <DisplayItems
                 handleInputChange={this.handleInputChange}
                 searchText={this.state.searchText}
-                handleEndDateChange={this.handleEndDateChange}
-                endDate={this.state.searchEndDate}
-                handleStartDateChange={this.handleStartDateChange}
-                startDate={this.state.searchStartDate}
                 isSearch={this.state.isSearch}
                 searchClick={this.handlesearchClick}
-                guests={this.state.guests}
               />
             );
           }}
-          path="/display-properties"
+          path="/display-items"
         />
-
+        <Route path="/restaurant-display/:id" component={RestaurantDisplay} />
         <Route path="/profile-details" component={Profile} />
-        <Route path="/update-item" component={UpdateItems} />
+        <Route path="/update-item/:id" component={UpdateItems} />
         <Route path="/owner-dashboard" component={OwnerDashboard} />
-        <Route path="/my-trips" component={MyOrders} />
         <Route path="/add-items" component={AddItems} />
         <Route path="/error" component={Error} />
+        <Route path="/cart-details" component={Cart} />
+        <Route path="/place-order" component={Cart} />
+        <Route path="/owner-order-details" component={OwnerOrders} />
+        <Route path="/breakfast-display" component={Breakfast} />
+        <Route path="/lunch-display" component={Lunch} />
+        <Route path="/dinner-display" component={Dinner} />
+        <Route path="/buyer-order" component={BuyerOrder} />
+        <Route path="/past-order" component={PastOrders} />
+        <Route path="/cuisine-display/:id" component={CuisineDisplay} />
       </div>
     );
   }
