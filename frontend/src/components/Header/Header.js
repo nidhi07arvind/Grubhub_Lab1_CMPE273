@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import cookie from "react-cookies";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.css";
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   constructor() {
@@ -21,30 +23,64 @@ class Header extends Component {
 
   render() {
     let loggedInUserContent = null;
-    let ownerContent = null;
-    let travelerContent = null;
-    let ownerListPropertyTab = null;
+    let ownerTab = null;
+    let buyerTab = null;
 
-    if (cookie.load("Accounttype") === 2) {
-      ownerContent = (
-        <a className="dropdown-item blue-text" href="/owner-dashboard">
-          Owner Dashboard
-        </a>
-      );
-      ownerListPropertyTab = (
+    if (cookie.load("owner")) {
+      ownerTab = (
         <span>
-          <a href="/add-property" className="btn btn-lg lyp-btn">
-            List your property
-          </a>
+          <span>
+            <a href="/add-items" className="btn btn-sm lyp-btn">
+              Add Items
+            </a>
+          </span>
+          <span>
+            <a href="/owner-dashboard" className="btn btn-sm lyp-btn">
+              Dashboard
+            </a>
+          </span>
+          <span>
+            <a href="/owner-order-details" className="btn btn-sm lyp-btn">
+              Orders
+            </a>
+          </span>
+
+          <span>
+            <a
+              className="btn btn-sm lyp-btn"
+              href="/login"
+              onClick={this.handleLogout}
+            >
+              Logout
+            </a>
+          </span>
         </span>
       );
     }
 
-    if (cookie.load("Accounttype") === 1 || cookie.load("Accounttype") === 3) {
-      travelerContent = (
-        <a className="dropdown-item blue-text" href="/my-trips">
-          My Trips
-        </a>
+    if (cookie.load("buyer")) {
+      buyerTab = (
+        <span>
+          <span>
+            <a href="/buyer-order" className="btn btn-sm lyp-btn">
+              Orders
+            </a>
+          </span>
+          <span>
+            <a href="/cart-details" className="btn btn-sm lyp-btn">
+              Cart
+            </a>
+          </span>
+          <span>
+            <a
+              className="btn btn-sm lyp-btn"
+              href="/login"
+              onClick={this.handleLogout}
+            >
+              Logout
+            </a>
+          </span>
+        </span>
       );
     }
 
@@ -52,37 +88,16 @@ class Header extends Component {
     if (cookie.load("cookie")) {
       loggedInUserContent = (
         <span className="header-bar-tabs">
-          <span className="blue-text">Trip Boards</span>
+          <a className="btn btn-sm lyp-btn" href="/profile-details">
+            Profile
+          </a>
+          {ownerTab}
+          {buyerTab}
           <span>
-            <a
-              className="btn dropdown-toggle userName-dropdown"
-              href="#"
-              role="button"
-              id="dropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {username}
-            </a>
-            {this.props.name}
+            <a>Welcome! {username}</a>
 
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a className="dropdown-item blue-text" href="/profile">
-                Profile
-              </a>
-              {travelerContent}
-              {ownerContent}
-              <a
-                className="dropdown-item blue-text"
-                href="/login"
-                onClick={this.handleLogout}
-              >
-                Logout
-              </a>
-            </div>
+            <div></div>
           </span>
-          {ownerListPropertyTab}
         </span>
       );
     }
@@ -94,10 +109,12 @@ class Header extends Component {
             <img
               src={require("../../Static/Images/grubhub.jpg")}
               style={{ width: 200, height: 200 }}
-              alt="logo-homeaway"
+              alt="logo-grubhub"
             />
           </a>
+
           {loggedInUserContent}
+
           <a href="/home">
             <img
               src={require("../../Static/Images/fd.jpg")}
