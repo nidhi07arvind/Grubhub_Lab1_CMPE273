@@ -23,7 +23,11 @@ class UpdateItems extends Component {
 
   componentDidMount() {
     axios.defaults.withCredentials = true;
-    axios.get("http://localhost:3001/update-item").then(response => {
+    var data = {
+      item_id: this.props.match.params.id
+    };
+    console.log("Data:", data);
+    /*axios.get("http://localhost:3001/update-item").then(response => {
       if (response.status === 200) {
         console.log(response.data);
         var data = response.data;
@@ -34,7 +38,7 @@ class UpdateItems extends Component {
           section: data.section
         });
       }
-    });
+    });*/
   }
   handleChange = e => {
     const target = e.target;
@@ -135,7 +139,7 @@ class UpdateItems extends Component {
                   <label class="control-label col-sm-2">Menu Section</label>
                   <select class="form-control" onChange={this.handleChange}>
                     <option value="select">Select</option>
-                    <option value="Breakfast">Owner</option>
+                    <option value="Breakfast">Breakfast</option>
                     <option value="Lunch">Lunch</option>
                     <option value="Dinner">Dinner</option>
                   </select>
