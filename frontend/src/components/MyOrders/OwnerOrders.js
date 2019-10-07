@@ -1,36 +1,39 @@
 import React, { Component } from "react";
-import Header from "../Header/Header";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
+import Header from "../Header/Header";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
+import { runInThisContext } from "vm";
 
-class Cart extends Component {
+class OwnerOrders extends Component {
   constructor() {
     super();
     this.state = {
-      items: [{ item_id: "", res_id: "", quantity: "" }],
-
+      items: [{ order_id: "", res_id: "", email: "", status: "" }],
       itemDetails: [],
       errorRedirect: false
     };
+
+    //Bind
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleChange = (e, item_id, quantity) => {
+
+  handleChange = (e, order_id, status) => {
     let checkItems = this.state.items.map(item => {
-      if (item.item_id == item_id) {
-        item.quantity = e.target.value;
+      if (item.order_id == order_id) {
+        item.status = e.target.value;
 
         this.setState({
-          quantity: e.target.value
+          status: e.target.value
         });
-        console.log(item.quantity);
+        console.log(item.status);
       }
       return item;
     });
 
-    console.log("Updated items", checkItems);
+    console.log("Updated Orders", checkItems);
   };
 
   handleSubmit = e => {
@@ -38,13 +41,13 @@ class Cart extends Component {
 
     axios.defaults.withCredentials = true;
 
-    const { data } = this.state.items[0].item_id;
+    const { data } = this.state.items[0].order_id;
 
     axios
-      .post("http://localhost:3001/place-order", this.state.items)
+      .post("http://localhost:3001/update-owner-order", this.state.items)
       .then(response => {
         if (response === 200) {
-          console.log("Order placed");
+          console.log("Order Updated");
         }
       })
       .catch(err => {
@@ -55,29 +58,26 @@ class Cart extends Component {
         }
       });
   };
-
   componentDidMount() {
     axios.defaults.withCredentials = true;
-
     axios
-      .get("http://localhost:3001/cart-details")
+      .get("http://localhost:3001/owner-order-details")
       .then(response => {
         if (response.status === 200) {
-          console.log("Response : ", response.data);
-          let data = response.data;
+          console.log("Response:", response.data);
+          var data = response.data;
           data = data.map(item => {
             this.setState({
               items: response.data,
-              item_id: data.item_id,
+              order_id: data.order_id,
               res_id: data.res_id,
-              quantity: data.quantity,
-              price: data.price
+              email: data.email,
+              status: data.status
             });
-            console.log(item.quantity);
+            console.log(item.status);
           });
         }
       })
-
       .catch(err => {
         if (err) {
           this.setState({
@@ -92,60 +92,51 @@ class Cart extends Component {
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
+
     if (this.state.errorRedirect === true) {
       redirectVar = <Redirect to="/error" />;
     }
-    console.log(this.state.items);
-    let totalprice = null;
+
+    console.log(this.state.orders);
     let itemDetails = this.state.items.map(function(item, index) {
-      totalprice += item.price * item.quantity;
       return (
         <div className="container trip-details-container" key={index}>
           <div className="trip-details-content border">
             <div className="trip-main-details blue-text">
-              <div>Item Type : {item.item_id}</div>
-              <div>{item.item_name}</div>
-              <div>Price: {item.price}$</div>
+              <div>Order ID : {item.order_id}</div>
+
+              <div>Restaurant: {item.res_id}</div>
               <div>
-                Quantity:{console.log("quantity", item.quantity)}
+                Status:{console.log("status", item.status)}
                 <input
                   type="text"
                   name="quantity"
-                  // value={item.quantity}
-                  onChange={
-                    e => {
-                      this.handleChange(e, item.item_id, item.quantity);
-                    }
-                    // this.handleChange(e, item.item_id, item.quantity
-                  }
+                  onChange={e => {
+                    this.handleChange(e, item.order_id, item.status);
+                  }}
                 ></input>
               </div>
-              <br></br>
-              <button className="btn btn-danger">Delete Item</button>
-              <div>{item.description}</div>
             </div>
           </div>
         </div>
       );
     }, this);
-    //});
 
     return (
       <div>
         <Header />
         <div className="dashboard-container">
           <div className="center-content owner-dashboard-banner">
-            <h1>Cart</h1>
-            <h1>Total Price: {totalprice}</h1>
+            <h1>Orders</h1>
             <button className="btn-btn-success" onClick={this.handleSubmit}>
               Place Order
             </button>
           </div>
-          <div>{itemDetails}</div>
         </div>
+        <div>{itemDetails}</div>
       </div>
     );
   }
 }
 
-export default Cart;
+export default OwnerOrders;
