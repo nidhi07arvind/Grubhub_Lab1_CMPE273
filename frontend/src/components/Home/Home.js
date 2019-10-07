@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-//import DatePicker from "react-datepicker";
-//import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
 import cookie from "react-cookies";
 import { Redirect } from "react-router";
-//import Header from "../Header/Header";
-//import DisplayProperties from "../DisplayProperties/DisplayProperties";
+import Header from "../Header/Header";
+import DisplayItems from "../DisplayItems/DisplayItems";
 
 class Home extends Component {
   constructor(props) {
@@ -13,27 +10,36 @@ class Home extends Component {
   }
 
   render() {
-    let redrirectVar = null;
-    /*if (!cookie.load("cookie")) {
-      redrirectVar = <Redirect to="/login" />;
-    }*/
+    let redirectVar = null;
+    if (!cookie.load("cookie")) {
+      redirectVar = <Redirect to="/login" />;
+    }
 
-    //if (this.props.isSearch) {
-    //redrirectVar = <Redirect to="/display-properties" />;
-    //}
+    if (this.props.isSearch) {
+      redirectVar = <Redirect to="/display-items" />;
+    }
 
     return (
       <div className="home-container">
-        {redrirectVar}
+        <Header />
+        {redirectVar}
         <div className="content">
           <div className="home-page-content">
             <div className="Hero-Image">
               <div className="jumbotron-content">
                 <h1>
-                  <div className="headline-text">
+                  <div
+                    className="headline-text"
+                    style={{ fontSize: 50, color: "black" }}
+                  >
                     Order mexican, indian cuisines...
                   </div>
-                  <div className="headline-text">and more...</div>
+                  <div
+                    className="headline-text"
+                    style={{ fontSize: 50, color: "black" }}
+                  >
+                    and more...
+                  </div>
                 </h1>
                 <div className="form-group row search-tab">
                   <span className="col-lg-4 col-md-12 col-sm-12 col-xs-12 pad-bot-10">
@@ -42,16 +48,6 @@ class Home extends Component {
                       className="form-control form-control-lg"
                       name="searchText"
                       placeholder="Search"
-                      onChange={this.props.handleInputChange}
-                    ></input>
-                  </span>
-
-                  <span className="col-lg-2 col-md-3 col-sm-4 col-xs-4 pad-bot-10">
-                    <input
-                      type="textbox"
-                      className="form-control form-control-lg"
-                      name="guests"
-                      placeholder="2 guests"
                       onChange={this.props.handleInputChange}
                     ></input>
                   </span>
@@ -67,32 +63,12 @@ class Home extends Component {
                 </div>
               </div>
 
-              <div className="home-page-list-content hidden-xs">
-                <ul className="home-page-list">
-                  <li className="value-props-item">
-                    <strong className="value-props-title">
-                      Find the best restaurants and cuisines in town!!
-                    </strong>
-                    <span className="value-props-content">
-                      ..delivered to your doorstep...
-                    </span>
-                  </li>
-                  <li className="value-props-item">
-                    <strong className="value-props-title">
-                      Order delivered in 30 minutes...
-                    </strong>
-                    <span className="value-props-content">
-                      Have a nice day!!!
-                    </span>
-                  </li>
-                </ul>
-              </div>
+              <div className="home-page-list-content hidden-xs"></div>
               <div className="clear"></div>
             </div>
             <div className="recent-activity">
               <div className="jumbotron container recent-activity-content">
                 <div className="container mt-3">
-                  <h3>Recent Activity</h3>
                   <div
                     id="myCarousel"
                     className="carousel slide"
@@ -154,25 +130,22 @@ class Home extends Component {
                 src={require("../../Static/Images/pancakes.jpg")}
                 alt="lyp-image"
               ></img>
-              <div className="lyp-content center-content">
-                <h1>List your Property</h1>
-                <a href="/add-property" className="btn btn-success btn-lg">
-                  List Your Property
-                </a>
-              </div>
             </div>
 
             <div className="jumbotron footer-container">
               <div className="external-links">
-                <h4 className="external-links-headline-text">
-                  Meet the HomeAway Family
+                <h4
+                  className="external-links-headline-text"
+                  style={{ fontSize: 30, color: "black" }}
+                >
+                  Meet the Grubhub Family
                 </h4>
                 <a
                   href="https://www.homeaway.com/"
                   target="_blank"
                   className="btn btn-lg external-link-buttons"
                 >
-                  HomeAway
+                  Grubhub
                 </a>
                 <div className="divider" />
                 <a
@@ -180,7 +153,7 @@ class Home extends Component {
                   target="_blank"
                   className="btn btn-lg external-link-buttons"
                 >
-                  VRBO
+                  Gift Cards
                 </a>
                 <div className="divider" />
                 <a
@@ -188,7 +161,7 @@ class Home extends Component {
                   target="_blank"
                   className="btn btn-lg external-link-buttons"
                 >
-                  VacationRentals.com
+                  Browse by cities
                 </a>
                 <div className="divider" />
                 <a
@@ -196,7 +169,7 @@ class Home extends Component {
                   target="_blank"
                   className="btn btn-lg external-link-buttons"
                 >
-                  Homelidays
+                  Browse by cuisine
                 </a>
                 <div className="divider" />
                 <a
@@ -204,7 +177,7 @@ class Home extends Component {
                   target="_blank   "
                   className="btn btn-lg external-link-buttons"
                 >
-                  Toprural
+                  Browse by restaurants
                 </a>
                 <div className="divider" />
                 <a
@@ -212,23 +185,7 @@ class Home extends Component {
                   target="_blank"
                   className="btn btn-lg external-link-buttons"
                 >
-                  bookabach
-                </a>
-                <div className="divider" />
-                <a
-                  href="https://www.stayz.com.au/"
-                  target="_blank"
-                  className="btn btn-lg external-link-buttons"
-                >
-                  Stayz
-                </a>
-                <div className="divider" />
-                <a
-                  href="https://www.fewo-direkt.de/"
-                  target="_blank"
-                  className="btn btn-lg external-link-buttons"
-                >
-                  FeWo-direkt
+                  Premium Membership
                 </a>
               </div>
             </div>
